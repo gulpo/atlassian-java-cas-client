@@ -280,12 +280,12 @@
     <modules>
         <module>cas-client-core</module>
         <module>cas-client-integration-atlassian</module>
-        <module>cas-client-support-springboot</module>
+        <!--<module>cas-client-support-springboot</module> not used by hycom
         <module>cas-client-support-distributed-ehcache</module>
         <module>cas-client-support-distributed-memcached</module>
         <module>cas-client-support-saml</module>
         <module>cas-client-integration-tomcat-common</module>
-        <module>cas-client-integration-tomcat-v90</module>
+        <module>cas-client-integration-tomcat-v90</module>-->
     </modules>
 
     <properties>
