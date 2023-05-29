@@ -71,8 +71,9 @@ public final class Confluence80CasAuthenticator extends ConfluenceAuthenticator 
                 putPrincipalInSessionContext(request, user);
                 getElevatedSecurityGuard().onSuccessfulLoginAttempt(request, username);
                 // Firing this event is necessary to ensure the user's personal information is initialised correctly.
+                // TODO LoginEvent may reuiqre use of new constructor in Confluence 8.3.0+
                 getEventPublisher().publish(
-                        new LoginEvent(this, username, request.getSession().getId(), remoteHost, remoteIP));
+                        new LoginEvent(this, username, request.getSession().getId(), remoteHost, remoteIP, "CAS"));
                 LoginReason.OK.stampRequestResponse(request, response);
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Logging in [{}] from CAS.", username);

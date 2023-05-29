@@ -79,54 +79,6 @@
             <artifactId>spring-context</artifactId>
         </dependency>
 
-        <!-- <dependency>
-            <artifactId>atlassian-user</artifactId>
-            <groupId>com.atlassian.user</groupId>
-            <version>5.5.3</version>
-            <scope>provided</scope>
-            <type>jar</type>
-            <optional>true</optional>
-            <exclusions>
-                <exclusion>
-                    <groupId>opensymphony</groupId>
-                    <artifactId>oscore</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>opensymphony</groupId>
-                    <artifactId>propertyset</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.transaction</groupId>
-                    <artifactId>jta</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>ofbcore</groupId>
-                    <artifactId>ofbcore-jira-entity</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>ofbcore</groupId>
-                    <artifactId>ofbcore-jira-share</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>dom4j</groupId>
-                    <artifactId>dom4j</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency> -->
-
         <dependency>
             <artifactId>atlassian-osuser</artifactId>
             <groupId>com.atlassian.osuser</groupId>
@@ -174,7 +126,7 @@
         <dependency>
             <groupId>com.atlassian.confluence</groupId>
             <artifactId>confluence</artifactId>
-            <version>4.0</version>
+            <version>8.2.2</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -329,10 +281,10 @@
                     <groupId>com.atlassian.bandana</groupId>
                     <artifactId>atlassian-bandana</artifactId>
                 </exclusion>
-                <exclusion>
+                <!-- <exclusion>
                     <groupId>com.atlassian.user</groupId>
                     <artifactId>atlassian-user</artifactId>
-                </exclusion>
+                </exclusion> -->
                 <exclusion>
                     <groupId>com.atlassian.renderer</groupId>
                     <artifactId>atlassian-renderer</artifactId>
@@ -349,10 +301,10 @@
                     <groupId>joda-time</groupId>
                     <artifactId>joda-time</artifactId>
                 </exclusion>
-                <exclusion>
+                <!-- <exclusion>
                     <groupId>com.atlassian.seraph</groupId>
                     <artifactId>atlassian-seraph</artifactId>
-                </exclusion>
+                </exclusion> -->
                 <exclusion>
                     <groupId>com.atlassian.security.auth.trustedapps</groupId>
                     <artifactId>atlassian-trusted-apps-core</artifactId>
@@ -477,7 +429,7 @@
                     <groupId>javax.mail</groupId>
                     <artifactId>mail</artifactId>
                 </exclusion>
-                <exclusion>
+                <!-- <exclusion>
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-core</artifactId>
                 </exclusion>
@@ -492,15 +444,15 @@
                 <exclusion>
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-aop</artifactId>
-                </exclusion>
+                </exclusion> -->
                 <exclusion>
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-hibernate2</artifactId>
                 </exclusion>
-                <exclusion>
+                <!-- <exclusion>
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-beans</artifactId>
-                </exclusion>
+                </exclusion> -->
                 <exclusion>
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-jdbc</artifactId>
@@ -1461,6 +1413,19 @@
             <name>Atlassian 3rd Party Repository</name>
             <url>https://maven.atlassian.com/3rdparty/</url>
         </repository>
-
+        <repository>
+            <id>mvnrepo-public</id>
+            <name>mvnrepo-public</name>
+            <url>https://mvnrepository.com/artifact/</url>
+        </repository>
+        <repository>
+            <id>atlassian-external</id>
+            <name>atlassian-external</name>
+            <url>https://packages.atlassian.com/mvn/maven-atlassian-external</url>
+        </repository>
+        <!--
+        https://packages.atlassian.com/content/repositories/atlassian-public/
+        https://mvnrepository.com/artifact/
+        -->
     </repositories>
 </project>
