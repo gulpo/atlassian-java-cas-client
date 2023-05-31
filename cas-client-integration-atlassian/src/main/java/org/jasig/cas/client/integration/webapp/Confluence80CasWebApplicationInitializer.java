@@ -13,10 +13,11 @@ import javax.servlet.ServletException;
 import org.jasig.cas.client.authentication.AuthenticationFilter;
 import org.jasig.cas.client.session.SingleSignOutFilter;
 import org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.WebApplicationInitializer;
 
-@Order(2)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class Confluence80CasWebApplicationInitializer implements WebApplicationInitializer {
 
     private static final Logger logger = Logger.getLogger(Confluence80CasWebApplicationInitializer.class.getName());
@@ -38,7 +39,7 @@ public class Confluence80CasWebApplicationInitializer implements WebApplicationI
         logger.info("Registering CAS single sign out filter");
         casSingleSignOutRegistration.addMappingForUrlPatterns(
             EnumSet.allOf(DispatcherType.class),
-            true,
+            false,
             "/*");
         logInitParams(casSingleSignOutRegistration);
     }
@@ -51,7 +52,7 @@ public class Confluence80CasWebApplicationInitializer implements WebApplicationI
         logger.info("Registering CAS authentication filter");
         casAuthenticationRegistration.addMappingForUrlPatterns(
             EnumSet.allOf(DispatcherType.class),
-            true,
+            false,
             "/*");
         logInitParams(casAuthenticationRegistration);
     }
@@ -64,7 +65,7 @@ public class Confluence80CasWebApplicationInitializer implements WebApplicationI
         logger.info("Registering CAS validation filter");
         casValidationRegistration.addMappingForUrlPatterns(
             EnumSet.allOf(DispatcherType.class),
-            true,
+            false,
             "/*");
         logInitParams(casValidationRegistration);
     }
