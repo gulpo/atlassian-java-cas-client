@@ -2,7 +2,9 @@
 
 Code base is a fork of [apereo java cas client ver. 3.6.4](https://github.com/apereo/java-cas-client/blob/cas-client-3.6.4)
 Goal is to add support for Confuence 8+ using existing atlassian support by Apereo. For changes made see [Confluence80CasAuthenticator.java](./cas-client-integration-atlassian/src/main/java/org/jasig/cas/client/integration/atlassian/Confluence80CasAuthenticator.java) and [Confuence80CasWebApplicationInitializer.java](./cas-client-integration-atlassian/src/main/java/org/jasig/cas/client/integration/webapp/Confluence80CasWebApplicationInitializer.java)
+
 Known issues:
+
 - possible problems with some diacritics characters in some places like confluence space description due to CAS filter order.
 
 # Java Apereo CAS Client [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jasig.cas.client/cas-client-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.jasig.cas.client/cas-client)
