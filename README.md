@@ -1,3 +1,10 @@
+# Disclaimer
+
+Code base is a fork of [apereo java cas client ver. 3.6.4](https://github.com/apereo/java-cas-client/blob/cas-client-3.6.4)
+Goal is to add support for Confuence 8+ using existing atlassian support by Apereo. For changes made see [Confluence80CasAuthenticator.java](./cas-client-integration-atlassian/src/main/java/org/jasig/cas/client/integration/atlassian/Confluence80CasAuthenticator.java) and [Confuence80CasWebApplicationInitializer.java](./cas-client-integration-atlassian/src/main/java/org/jasig/cas/client/integration/webapp/Confluence80CasWebApplicationInitializer.java)
+Known issues:
+- possible problems with some diacritics characters in some places like confluence space description due to CAS filter order.
+
 # Java Apereo CAS Client [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jasig.cas.client/cas-client-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.jasig.cas.client/cas-client)
 
 <a name="intro"></a>
@@ -306,180 +313,6 @@ Filters that redirects to the supplied url based on an exception.  Exceptions an
 </filter-mapping>
 ```
 
-
-<a name="client-configuration-using-spring"></a>
-### Client Configuration Using Spring
-
-Configuration via Spring IoC will depend heavily on `DelegatingFilterProxy` class. For each filter that will be configured for CAS via Spring, a corresponding `DelegatingFilterProxy` is needed in the web.xml.
-
-As the `HttpServletRequestWrapperFilter` and `AssertionThreadLocalFilter` have no configuration options, we recommend you just configure them in the `web.xml`
-
-```xml
-<filter>
-    <filter-name>CAS Authentication Filter</filter-name>
-    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    <init-param>
-        <param-name>targetBeanName</param-name>
-        <param-value>authenticationFilter</param-value>
-    </init-param>
-  </filter>
-<filter-mapping>
-    <filter-name>CAS Authentication Filter</filter-name>
-    <url-pattern>/*</url-pattern>
-</filter-mapping>
-```
-
-<a name="bean-configuration"></a>
-#### Bean Configuration
-
-##### AuthenticationFilter
-```xml
-<bean
-    name="authenticationFilter"
-    class="org.jasig.cas.client.authentication.AuthenticationFilter"
-    p:casServerLoginUrl="https://localhost:8443/cas/login"
-    p:renew="false"
-    p:gateway="false"
-    p:service="https://my.local.service.com/cas-client" />
-```
-
-##### Cas10TicketValidationFilter
-```xml
-<bean
-    name="ticketValidationFilter"
-    class="org.jasig.cas.client.validation.Cas10TicketValidationFilter"
-    p:service="https://my.local.service.com/cas-client">
-    <property name="ticketValidator">
-        <bean class="org.jasig.cas.client.validation.Cas10TicketValidator">
-            <constructor-arg index="0" value="https://localhost:8443/cas" />
-        </bean>
-    </property>
-</bean>
-```
-
-##### Cas20ProxyReceivingTicketValidationFilter
-Configuration to validate tickets:
-```xml
-<bean
-    name="ticketValidationFilter"
-    class="org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter"
-    p:service="https://my.local.service.com/cas-client">
-    <property name="ticketValidator">
-        <bean class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">
-            <constructor-arg index="0" value="https://localhost:8443/cas" />
-        </bean>
-    </property>
-</bean>
-```
-
-Configuration to accept a Proxy Granting Ticket:
-```xml
-<bean
-    name="ticketValidationFilter"
-    class="org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter"
-    p:service="https://my.local.service.com/cas-client"
-    p:proxyReceptorUrl="/proxy/receptor">
-    <property name="ticketValidator">
-        <bean
-            class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator"
-            p:proxyCallbackUrl="/proxy/receptor">
-            <constructor-arg index="0" value="https://localhost:8443/cas" />
-        </bean>
-    </property>
-</bean>
-```
-
-Configuration to accept any Proxy Ticket (and Proxy Granting Tickets):
-
-```xml
-<bean
-    name="ticketValidationFilter"
-    class="org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter"
-    p:service="https://my.local.service.com/cas-client"
-    p:proxyReceptorUrl="/proxy/receptor">
-    <property name="ticketValidator">
-        <bean class="org.jasig.cas.client.validation.Cas20ProxyTicketValidator"
-            p:acceptAnyProxy="true"
-            p:proxyCallbackUrl="/proxy/receptor">
-            <constructor-arg index="0" value="https://localhost:8443/cas" />
-        </bean>
-    </property>
-</bean>
-```
-
-Configuration to accept Proxy Ticket from a chain (and Proxy Granting Tickets):
-
-```xml
-<bean
-    name="ticketValidationFilter"
-    class="org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter"
-    p:service="https://my.local.service.com/cas-client"
-    p:proxyReceptorUrl="/proxy/receptor">
-    <property name="ticketValidator">
-        <bean class="org.jasig.cas.client.validation.Cas20ProxyTicketValidator"
-            p:proxyCallbackUrl="/proxy/receptor">
-            <constructor-arg index="0" value="https://localhost:8443/cas" />
-            <property name="allowedProxyChains">
-                <list>
-                    <value>http://proxy1 http://proxy2</value>
-                </list>
-            </property>
-        </bean>
-    </property>
-</bean>
-```
-
-The specific filters can be configured in the following ways. Please see the JavaDocs included in the distribution for specific required and optional properties:
-
-<a name="jaas"></a>
-## JAAS
-The client supports the Java Authentication and Authorization Service (JAAS) framework, which provides authn facilities to CAS-enabled JEE applications.
-
-A general JAAS authentication module, `CasLoginModule`, is available with the specific purpose of providing authentication and authorization services to CAS-enabled JEE applications. The design of the module is simple: given a service URL and a service ticket in a `NameCallback` and `PasswordCallback`, respectively, the module contacts the CAS server and attempts to validate the ticket. In keeping with CAS integration for Java applications, a JEE container-specific servlet filter is needed to protect JEE Web applications. The JAAS support should be extensible to any JEE container.
-
-<a name="configure-casloginmodule"></a>
-### Configure CasLoginModule
-It is expected that for JEE applications both authentication and authorization services will be required for CAS integration. The following JAAS module configuration file excerpt demonstrates how to leverage SAML 1.1 attribute release in CAS to provide authorization data in addition to authentication:
-
-```
-cas {
-  org.jasig.cas.client.jaas.CasLoginModule required
-    ticketValidatorClass="org.jasig.cas.client.validation.Saml11TicketValidator"
-    casServerUrlPrefix="https://cas.example.com/cas"
-    tolerance="20000"
-    service="https://webapp.example.com/webapp"
-    defaultRoles="admin,operator"
-    roleAttributeNames="memberOf,eduPersonAffiliation"
-    principalGroupName="CallerPrincipal"
-    roleGroupName="Roles"
-    cacheAssertions="true"
-    cacheTimeout="480";
-}
-```
-
-
-| Property | Description | Required
-|----------|-------|-----------|
-| `ticketValidatorClass ` | Fully-qualified class name of CAS ticket validator class. | Yes
-| `casServerUrlPrefix` | URL to root of CAS Web application context. | Yes
-| `service` | CAS service parameter that may be overridden by callback handler. **Note**: service must be specified by at least one component such that it is available at service ticket validation time. | No
-| `defaultRoles` | Comma-delimited list of static roles applied to all authenticated principals. | No
-| `roleAttributeNames` | Comma-delimited list of attribute names that describe role data delivered to CAS in the service-ticket validation response that should be applied to the current authenticated principal. | No
-| `principalGroupName` | The name of a group principal containing the primary principal name of the current JAAS subject. The default value is `CallerPrincipal`. | No
-| `roleGroupName` | The name of a group principal containing all role data. The default value is `Roles`. | No
-| `cacheAssertions` | Flag to enable assertion caching. This may be required for JAAS providers that attempt to periodically reauthenticate to renew principal. Since CAS tickets are one-time-use, a cached assertion must be provided on reauthentication. | No
-| `cacheTimeout` | Assertion cache timeout in minutes. | No
-| `tolerance` | The tolerance for drifting clocks when validating SAML tickets. | No
-
-### Programmatic JAAS login using the Servlet 3
-A `org.jasig.cas.client.jaas.Servlet3AuthenticationFilter` servlet filter that performs a programmatic JAAS login using the Servlet 3.0 `HttpServletRequest#login()` facility. This component should be compatible with any servlet container that supports the Servlet 3.0/JEE6 specification.
- 
-The filter executes when it receives a CAS ticket and expects the
-`CasLoginModule` JAAS module to perform the CAS ticket validation in order to produce an `AssertionPrincipal` from which the CAS assertion is obtained and inserted into the session to enable SSO.
-
-If a `service` init-param is specified for this filter, it supersedes
-the service defined for the `CasLoginModule`.
-
 <a name="tomcat-678-integration"></a>
 ## Tomcat 6/7/8/9 Integration
 The client supports container-based CAS authentication and authorization support for the Tomcat servlet container. 
@@ -661,7 +494,7 @@ Add the CAS filters to the end of the filter list. See `web.xml` configuration o
 #### Filters definition - configuration for Confluence
 For Confluence version 4.x through 7.19.1 add the CAS filters to the end of the filter list. See `web.xml` configuration of the client.
 
-For Confluence version 8.x and newer extract org.jasig.cas.client.integration.webapp.Confluence80CasWebApplicationInitializer.class file from jar and add it to the Confluence WEB-INF/classes in the same packet path.
+For Confluence version 8.x and newer extract org.jasig.cas.client.integration.webapp.Confluence80CasWebApplicationInitializer.class file from jar and add it to the Confluence WEB-INF/classes in the same package path.
 Add the CAS filters configuration to web.xml. See `web.xml` configuration of the client.
 Filter mapping should be defined by the Confluence80CasWebApplicationInitializer class for /* path.
 

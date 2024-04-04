@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
-import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
@@ -17,6 +16,24 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.WebApplicationInitializer;
 
+/**
+ * This class is a workaround for the fact that Confluence 8.0+ does not support
+ * {@link org.springframework.web.context.ContextLoaderListener} and
+ * {@link org.springframework.web.filter.DelegatingFilterProxy} in its
+ * {@code web.xml} file.  This class is a {@link WebApplicationInitializer} that
+ * initializes the CAS SSO filters.
+ * 
+ * <p>See <a href="https://community.developer.atlassian.com/t/redirection-loop-to-login-page-using-custom-sso/69325">Redirection loop to login page using Custom SSO</a>
+ * and <a href="https://support.atlassian.com/requests/CSP-316874/">CSP-316874</a>
+ * for more information.</p>
+ * 
+ * For Confluence to use this class, it must be added to the $INSTALL_DIR/confluence/WEB-INF/classes/
+ * directory.
+ * 
+ * As this class doesn't work when added to a JAR file it is ok for jira to use the same jar as confluence
+ * 
+ * Every filter defined by this initializer is by default added for <code>/*</code> path
+ */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class Confluence80CasWebApplicationInitializer implements WebApplicationInitializer {
 
